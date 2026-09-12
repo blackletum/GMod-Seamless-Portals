@@ -100,7 +100,7 @@ local function update_hull(ply, ply_pos)
 	-- no need to modify hull if we're in noclip
 	if ply:GetMoveType() == MOVETYPE_NOCLIP then
 		validate_hull(ply)
-		return
+		return true
 	end
 
 	local hull_mins, hull_maxs = get_hull(ply)
@@ -286,10 +286,10 @@ hook.Add("Move", "seamless_portal_teleport", function(ply, mv)
 
 	-- update_hull will return true if we might need to do a ground extrusion
 	local ply_pos = mv:GetOrigin()
-	if update_hull(ply, ply_pos + ply_vel_offset) then
-		if extrude_player(ply, ply_pos) then
-			mv:SetOrigin(ply_pos)
-		end
+	if !update_hull(ply, ply_pos + ply_vel_offset) then return end
+
+	if extrude_player(ply, ply_pos) then
+		mv:SetOrigin(ply_pos)
 	end
 
 	-- teleportation logic
