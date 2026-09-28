@@ -94,10 +94,11 @@ function ENT:DrawStenciled(texture, flip, nudge_z)
 
 		render.SetStencilCompareFunction(STENCIL_EQUAL)
 
+		local view_setup = render.GetViewSetup(true)
 		if flip then
-			render.DrawTextureToScreenRect(texture, ScrW(), 0, -ScrW(), ScrH())
+			render.DrawTextureToScreenRect(texture, view_setup.width - view_setup.x, view_setup.y, view_setup.x - view_setup.width, view_setup.height)
 		else
-			render.DrawTextureToScreen(texture)
+			render.DrawTextureToScreenRect(texture, view_setup.x, view_setup.y, view_setup.width, view_setup.height)
 		end
 
 		render.SetStencilEnable(false)
