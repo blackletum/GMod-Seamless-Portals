@@ -133,6 +133,11 @@ local function render_scene()
 	-- DOORS support, their detour breaks my cam context..
 	local render_view = render.RealRenderView or render.RenderView
 
+	-- just disable halos. they're broken and eat performance
+	local halo = halo or {} -- for other gamemodes
+	local halo_Render = halo.Render
+	halo.Render = function() end
+
 	local clip = render.EnableClipping(true)
 	render.PushCustomClipPlane(clip_up, clip_up:Dot(clip_pos))
 	push_cam(1)
@@ -140,6 +145,8 @@ local function render_scene()
 	pop_cams()
 	render.PopCustomClipPlane()
 	render.EnableClipping(clip)
+
+	halo.Render = halo_Render
 
 	SeamlessPortals.Rendering = false
 end
